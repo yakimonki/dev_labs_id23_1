@@ -29,3 +29,30 @@
 27. Супрун Алексей Юрьевич - Suprun_id23_1
 28. Чикарев Евгений Кириллович - Chikarev_id23_1
 29. Янданов Владимир Львович - Yandanov_id23_1
+
+| Students      | 1lab  | 2lab | 3lab | 4lab |
+|---------------|-------|------|------|------|
+| Agaliyeva     | сдано |      |      |      |
+| Alyushina     | сдано |      |      |      |
+| Blagodarenko  |       |      |      |      |
+| Vu Le Hoang   |       |      |      |      |
+| Gatamov       | сдано |      |      |      |
+| Gorelov       | сдано |      |      |      |
+| Gushchin      |       |      |      |      |
+| Zaitseva      |       |      |      |      |
+| Kim           |       |      |      |      |
+| Kozharova     |       |      |      |      |
+| Kozubov       |       |      |      |      |
+| Kostenko      | сдано |      |      |      |
+| Kochetkov     |       |      |      |      |
+| Kuznetsov     |       |	 	|	 	|
+| Kundalyov    	| 	 	|	 	|	 	|
+| Kurbanov    	| 	 	|	 	|	 	|
+| Maksimov D.  	| 	 	|	 	|	 	|
+| Maksimov S.  	| 	 	|	 	|	 	|
+| Markov       	| 	 	|	 	|	 	|
+| Maslov       	| сдано	|	 	|	 	|
+| Mukhamadiev  	| 	 	|	 	|	 	|
+| Muchkaev    	| 	 	|	 	|	 	|
+| Pevtsov      	| 	 	|	 	|	 	|
+| Selin        	| 	 	|	 	|	 	|
