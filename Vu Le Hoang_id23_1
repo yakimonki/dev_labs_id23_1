@@ -1,0 +1,37 @@
+from Tkinter import *
+import math
+
+
+SIZE = 600
+WIDTH = SIZE
+HEIGHT = SIZE
+def coords(angle,R1,R2):
+    x = math.cos(angle) * R1
+    y = math.sin(angle) * R1
+    return x - R2 + SIZE / 2, y - R2 + SIZE / 2, x + R2 + SIZE / 2, y + R2 + SIZE / 2
+
+def motion(v,t,f,angle,R1,R2):
+    if t == 'R':
+        angle = angle + 0.01 * v
+    else:
+        angle = angle - 0.01 * v
+    c.coords(f, coords(angle,R1,R2))
+    root.after(v, lambda:motion(v,t,f,angle,R1,R2))
+
+angle = 0
+root = Tk()
+
+c = Canvas(root, width=WIDTH, height=HEIGHT, bg="white")
+c.pack()
+
+
+c.create_oval(SIZE / 2 - 200, SIZE / 2 - 200, SIZE / 2 + 200, SIZE / 2 + 200, fill='red')
+
+f = c.create_oval(coords(angle,205, 5), fill='black')
+root.after(40, motion(5,'R',f,angle,205, 5))
+
+f1 = c.create_oval(coords(angle, 270, 30), fill='blue')
+root.after(40, motion(1,'L',f1,angle,270, 30))
+f2 = c.create_oval(coords(angle, 230, 30), fill='green')
+root.after(40, motion(10,'R',f2,angle,250, 20))
+root.mainloop()
