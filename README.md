@@ -45,7 +45,7 @@
 | Kozubov       |       |      |      |      |
 | Kostenko      | сдано |      |      |      |
 | Kochetkov     |       |      |      |      |
-| Kuznetsov     |       |	 	|	 	|
+| Kuznetsov     | сдано |	 	|	 	|
 | Kundalyov    	| 	 	|	 	|	 	|
 | Kurbanov    	| 	 	|	 	|	 	|
 | Maksimov D.  	| 	 	|	 	|	 	|
