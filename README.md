@@ -52,7 +52,7 @@
 | Maksimov S.  	|сдано 	 	| сдано	 	|	 	|
 | Markov       	| 	 	|	 	|	 	|
 | Maslov       	| сдано	| сдано	 |	 	|
-| Mukhamadiev  	| 	 	|	 	|	 	|
+| Mukhamadiev  	| сдано	 	|	 	|	 	|
 | Muchkaev    	| 	 	|	 	|	 	|
 | Pevtsov      	| 	 	|	 	|	 	|
 | Selin        	| сдано	 	|	 🔥сдано	|	 	|
