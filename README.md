@@ -38,7 +38,7 @@
 | Vu Le Hoang   |       |      |      |      |
 | Gatamov       | сдано |сдано |      |      |
 | Gorelov       | сдано | 🔥сдано     |      |      |
-| Gushchin      |       |      |      |      |
+| Gushchin      | сдано |      |      |      |
 | Zaitseva      |       |      |      |      |
 | Kim           |       |      |      |      |
 | Kozharova     |       |      |      |      |
