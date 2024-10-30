@@ -43,7 +43,7 @@
 | Kim           |       |      |      |      |
 | Kozharova     |       |      |      |      |
 | Kozubov       |       |      |      |      |
-| Kostenko      | сдано |      |      |      |
+| Kostenko      | сдано |сдано |      |      |
 | Kochetkov     |       |      |      |      |
 | Kuznetsov     | сдано |	 	|	 	|
 | Kundalyov    	| 	 	|	 	|	 	|
