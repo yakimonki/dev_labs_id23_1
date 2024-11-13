@@ -1,0 +1,81 @@
+from tkinter import *
+import math
+
+def coords(SIZE,angle,R1,R2):
+    x = math.cos(math.radians(angle)) * R1
+    y = math.sin(math.radians(angle)) * R1
+    return x - R2 + SIZE, y - R2 + SIZE, x + R2 + SIZE, y + R2 + SIZE
+
+def coords1(SIZE,angle,R1,R2,R3):
+    x = math.cos(math.radians(angle)) * R1 + SIZE
+    y = math.sin(math.radians(angle)) * R1 + SIZE
+    
+    x1 = x + R3 * math.cos(math.radians(angle+5))
+    y1 = y - R3 * math.sin(math.radians(angle+5))
+    return x1 - R2, y1 - R2, x1 + R2, y1 + R2
+
+
+def motion(v,t,f,angle,R1,R2, p, S):
+    if angle >= 360:
+        angel=0
+    if t == 'R':
+        angle = angle + 0.1 * v
+    else:
+        angle = angle - 0.1 * v
+    f.c.coords(p , coords(S,angle,R1,R2))
+    f.root.after(v, lambda:motion(v,t,f,angle,R1,R2,p,S))
+
+def motion1(v,t,f,angle,R1,R2,R3, p, S):
+    if angle >= 360:
+        angel=0
+    if t == 'R':
+        angle = angle + 0.1 * v
+    else:
+        angle = angle - 0.1 * v
+    f.c.coords(p , coords1(S,angle,R1,R2,R3))
+    f.root.after(v, lambda:motion1(v,t,f,angle,R1,R2,R3,p,S))
+    
+class Window():
+    def __init__(self, SIZE):
+        self.SIZE=SIZE
+        self.root=Tk()
+        self.c=Canvas(self.root, width=SIZE, height=SIZE, bg='Black')
+        self.c.pack()
+      
+    
+        
+class Planet():
+    def __init__(self,v,R1,R2,R3,Turn='R',angle=0,SIZE=0,color='White',window=0):
+        self.v=v
+        self.R1=R1
+        self.R2=R2
+        self.R3=R3
+        self.Turn=Turn
+        self.angle=angle
+        self.SIZE=SIZE
+        self.color=color
+        self.x=window
+        self.coordtion = window.c.create_oval(coords(self.SIZE,angle,R1, R2), fill=color)
+    def _move(self):
+        self.x.root.after(self.v, motion(self.v, self.Turn, self.x, self.angle, self.R1, self.R2, self.coordtion,self.SIZE))
+
+    def _move1(self):
+        self.x.root.after(self.v, motion1(self.v, self.Turn, self.x, self.angle, self.R1, self.R2,self.R3, self.coordtion,self.SIZE))
+
+x=Window(600)
+Sun=Planet(10,x.SIZE*0,x.SIZE/5,0,'L',0,x.SIZE/2,'Yellow',x)
+Earth=Planet(15,x.SIZE/3,x.SIZE/40,0,'L',0,x.SIZE/2,'Blue',x)
+Marse=Planet(7,x.SIZE/2.9,x.SIZE/50,0,'L',0,x.SIZE/2,'Red',x)
+Venera=Planet(11,x.SIZE/3.6,x.SIZE/40,0,'L',0,x.SIZE/2,'Orange',x)
+Sezar=Planet(10,x.SIZE/4.7,x.SIZE/50,0,'R',0,x.SIZE/2,'Brown',x)
+Venera1=Planet(11,x.SIZE/3.6,x.SIZE/60,25,'L',0,x.SIZE/2,'Green',x)
+Moon=Planet(15,x.SIZE/3,x.SIZE/60,30,'L',0,x.SIZE/2,'White',x)
+Venera2=Planet(11,x.SIZE/3.6,x.SIZE/70,50,'L',0,x.SIZE/2,'Green',x)
+Earth._move()
+Marse._move()
+Venera._move()
+Venera1._move1()
+Venera2._move1()
+Sezar._move()
+Moon._move1()
+x.root.mainloop()
