@@ -1,0 +1,11 @@
+{
+    "min_speed": 50,
+    "max_speed": 200,
+    "min_length": 5,
+    "max_length": 15,
+    "default_drops": 50,
+    "min_drops": 10,
+    "max_drops": 200,
+    "background_color": [30, 30, 30],
+    "drop_color": [173, 216, 230]
+}
