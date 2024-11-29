@@ -1,0 +1,11 @@
+{
+    "default_drops": 50,
+    "min_angle": -15,
+    "max_angle": 15,
+    "min_speed": 100,
+    "max_speed": 200,
+    "min_length": 10,
+    "max_length": 20,
+    "background_color": [30, 30, 30],
+    "drop_color": [100, 100, 255]
+}
