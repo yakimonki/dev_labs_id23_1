@@ -42,7 +42,7 @@
 | Zaitseva      |       |      |      |      |
 | Kim           |       |      |      |      |
 | Kozharova     |       |      |      |      |
-| Kozubov       |  сдано     |      |      |      |
+| Kozubov       |  сдано     |      |    |      |
 | Kostenko      | сдано |сдано | сдано |      |
 | Kochetkov     |       |      |      |      |
 | Kuznetsov     | сдано |	 	|	 	|
