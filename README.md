@@ -47,7 +47,7 @@
 | Kochetkov     |       |      |      |      |
 | Kuznetsov     | сдано |	 	|	 	|
 | Kundalyov    	| 	 	|	 	|	 	|
-| Kurbanov    	| сдано	 	|	 	|	 	|
+| Kurbanov    	| сдано	 	|	сдано 	|	 	|
 | Maksimov D.  	| 	 	|	 	|	 	|
 | Maksimov S.  	|сдано 	 	| сдано	 	|сдано|
 | Markov       	| 	 	|	 	|	 	|
