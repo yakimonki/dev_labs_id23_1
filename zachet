@@ -1,0 +1,73 @@
+import tkinter as tk
+
+
+class EclipseSimulation:
+    def __init__(self, root):
+        self.root = root
+        root.title("Симуляция солнечного затмения")
+
+     
+        self.speed = tk.DoubleVar(value=0.1)
+        self.radius_moon = tk.DoubleVar(value=20)  
+        self.distance = tk.DoubleVar(value=200) 
+        self.x_moon = -self.distance.get() 
+        self.animation_running = False
+
+  
+        tk.Label(root, text="Скорость Луны:").grid(row=0, column=0)
+        tk.Scale(root, variable=self.speed, from_=0, to=5, resolution=0.1, orient=tk.HORIZONTAL).grid(row=0, column=1)
+
+        tk.Label(root, text="Радиус Луны:").grid(row=1, column=0)
+        tk.Entry(root, textvariable=self.radius_moon).grid(row=1, column=1)
+
+        tk.Label(root, text="Расстояние:").grid(row=2, column=0)
+        tk.Scale(root, variable=self.distance, from_=100, to=300, orient=tk.HORIZONTAL).grid(row=2, column=1)
+
+
+        tk.Button(root, text="Запуск", command=self.start_animation).grid(row=3, column=0)
+        tk.Button(root, text="Сброс", command=self.reset_animation).grid(row=3, column=1)
+
+  
+        self.canvas_width = 400
+        self.canvas_height = 200
+        self.canvas = tk.Canvas(root, width=self.canvas_width, height=self.canvas_height, bg="black")
+        self.canvas.grid(row=4, column=0, columnspan=2)
+
+        self.sun = self.canvas.create_oval(
+            self.canvas_width / 2 - 50, self.canvas_height / 2 - 50,
+            self.canvas_width / 2 + 50, self.canvas_height / 2 + 50,
+            fill="yellow"
+        )
+        self.moon = self.canvas.create_oval(0, 0, 0, 0, fill="black") 
+        self.reset_animation()
+
+    def update_eclipse(self):
+        if self.animation_running:
+            self.x_moon += self.speed.get()
+            x1 = self.x_moon - self.radius_moon.get()
+            y1 = self.canvas_height / 2 - self.radius_moon.get()
+            x2 = self.x_moon + self.radius_moon.get()
+            y2 = self.canvas_height / 2 + self.radius_moon.get()
+            self.canvas.coords(self.moon, x1, y1, x2, y2)
+
+            if self.x_moon > self.canvas_width + self.radius_moon.get():
+                self.x_moon = -self.distance.get()
+
+            self.root.after(50, self.update_eclipse)
+
+    def start_animation(self):
+        self.animation_running = True
+        self.update_eclipse()
+
+    def reset_animation(self):
+        self.animation_running = False
+        self.x_moon = -self.distance.get()
+        x1 = self.x_moon - self.radius_moon.get()
+        y1 = self.canvas_height / 2 - self.radius_moon.get()
+        x2 = self.x_moon + self.radius_moon.get()
+        y2 = self.canvas_height / 2 + self.radius_moon.get()
+        self.canvas.coords(self.moon, x1, y1, x2, y2)
+
+root = tk.Tk()
+sim = EclipseSimulation(root)
+root.mainloop()
