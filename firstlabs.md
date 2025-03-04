@@ -184,3 +184,6 @@ Path это путь, а total_distance это дистанция (len(path)).
 ## Курсы по fast api
 [Артем Шумейко](https://youtube.com/playlist?list=PLuW7Z72R04bi313KhHamabibc8JW2HDU3&si=pw4q-OImqdknAo7c)  <br>
 [Программирование и иже с ним(смотреть на свой страх и риск, но чувак сильный)](https://youtube.com/playlist?list=PLeLN0qH0-mCVQKZ8-W1LhxDcVlWtTALCS&si=swC88v6orGsczS0S)
+
+## Распределение
+[Распределение](https://docs.google.com/spreadsheets/d/1g3lXA-NAbbrZEi198_uo-EjEvQWhRVKf9cY4WHZV6Ds/edit?usp=sharing)
