@@ -181,6 +181,6 @@ Path это путь, а total_distance это дистанция (len(path)).
 @app.get("/get_status")
 Принимает id и возвращает статус задачи.
 
-
-[fast api](https://youtube.com/playlist?list=PLuW7Z72R04bi313KhHamabibc8JW2HDU3&si=pw4q-OImqdknAo7c)
-[fast api(смотреть на свой страх и риск, но чувак сильный)](https://youtube.com/playlist?list=PLeLN0qH0-mCVQKZ8-W1LhxDcVlWtTALCS&si=swC88v6orGsczS0S)
+## Курсы по fast api
+[Артем Шумейко](https://youtube.com/playlist?list=PLuW7Z72R04bi313KhHamabibc8JW2HDU3&si=pw4q-OImqdknAo7c)  <br>
+[Программирование и иже с ним(смотреть на свой страх и риск, но чувак сильный)](https://youtube.com/playlist?list=PLeLN0qH0-mCVQKZ8-W1LhxDcVlWtTALCS&si=swC88v6orGsczS0S)
