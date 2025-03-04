@@ -182,5 +182,5 @@ Path это путь, а total_distance это дистанция (len(path)).
 Принимает id и возвращает статус задачи.
 
 
-(fast api)[https://youtube.com/playlist?list=PLeLN0qH0-mCVQKZ8-W1LhxDcVlWtTALCS&si=swC88v6orGsczS0S]
-(fast api)[https://youtube.com/playlist?list=PLuW7Z72R04bi313KhHamabibc8JW2HDU3&si=pw4q-OImqdknAo7c]
+[fast api](https://youtube.com/playlist?list=PLuW7Z72R04bi313KhHamabibc8JW2HDU3&si=pw4q-OImqdknAo7c)
+[fast api(смотреть на свой страх и риск, но чувак сильный)](https://youtube.com/playlist?list=PLeLN0qH0-mCVQKZ8-W1LhxDcVlWtTALCS&si=swC88v6orGsczS0S)
