@@ -18,7 +18,7 @@ def send_ws_message(user_id: str, message: dict):
     channel = f"user_{user_id}_channel"
     redis_client.publish(channel, json.dumps(message))
 
-celery_app.task(bind=True)
+@celery_app.task(bind=True)
 def bruteforce_task(self, user_id, task_id, hash_type, charset_length, max_length):
     # Отправляем стартовое уведомление
     send_ws_message(user_id, {
