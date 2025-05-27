@@ -1,0 +1,55 @@
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Depends
+from fastapi.responses import HTMLResponse
+from tasks import bruteforce_task
+from celery.result import AsyncResult
+import redis
+import asyncio
+import json
+import uuid
+
+app = FastAPI()
+redis_client = redis.Redis()
+
+# Хранилище подключений: user_id -> set of WebSocket
+connections = {}
+
+async def redis_pubsub_listener(user_id: str, websocket: WebSocket):
+    pubsub = redis_client.pubsub()
+    channel = f"user_{user_id}_channel"
+    pubsub.subscribe(channel)
+    try:
+        while True:
+            message = pubsub.get_message(ignore_subscribe_messages=True, timeout=1)
+            if message:
+                await websocket.send_text(message['data'].decode())
+            await asyncio.sleep(0.1)
+    except Exception:
+        pass
+    finally:
+        pubsub.unsubscribe(channel)
+
+@app.websocket("/ws/{user_id}")
+async def websocket_endpoint(websocket: WebSocket, user_id: str):
+    await websocket.accept()
+    if user_id not in connections:
+        connections[user_id] = set()
+    connections[user_id].add(websocket)
+
+    listener_task = asyncio.create_task(redis_pubsub_listener(user_id, websocket))
+
+    try:
+        while True:
+            data = await websocket.receive_text()
+            # Обработка сообщений от клиента (управление задачами)
+            # Пример: pause, resume, cancel с task_id
+    except WebSocketDisconnect:
+        connections[user_id].remove(websocket)
+        listener_task.cancel()
+
+@app.post("/tasks/start")
+async def start_task(user_id: str, hash_type: str, charset_length: int, max_length: int):
+    task_id = str(uuid.uuid4())
+    task = bruteforce_task.apply_async(args=[user_id, task_id, hash_type, charset_length, max_length], task_id=task_id)
+    return {"task_id": task_id}
+
+# Добавьте эндпоинты pause, resume, cancel по аналогии
