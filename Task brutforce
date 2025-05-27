@@ -1,0 +1,52 @@
+from celery_app import celery_app
+import time
+import json
+from fastapi import WebSocket
+import asyncio
+
+# Функция для отправки сообщений в Redis Pub/Sub (или другой брокер)
+import redis
+redis_client = redis.Redis()
+
+def send_ws_message(user_id: str, message: dict):
+    channel = f"user_{user_id}_channel"
+    redis_client.publish(channel, json.dumps(message))
+
+@celery_app.task(bind=True)
+def bruteforce_task(self, user_id, task_id, hash_type, charset_length, max_length):
+    # Отправляем стартовое уведомление
+    send_ws_message(user_id, {
+        "status": "STARTED",
+        "task_id": task_id,
+        "hash_type": hash_type,
+        "charset_length": charset_length,
+        "max_length": max_length
+    })
+
+    total = 1000000  # примерное количество комбинаций
+    start_time = time.time()
+
+    for i in range(total):
+        # Эмуляция перебора
+        time.sleep(0.001)
+
+        if i % 10000 == 0:
+            progress = int(i / total * 100)
+            send_ws_message(user_id, {
+                "status": "PROGRESS",
+                "task_id": task_id,
+                "progress": progress,
+                "current_combination": "abc",  # пример
+                "combinations_per_second": 15000
+            })
+
+        # Проверка отмены или паузы можно реализовать через shared state
+
+    elapsed = time.time() - start_time
+
+    send_ws_message(user_id, {
+        "status": "COMPLETED",
+        "task_id": task_id,
+        "result": "найденный_пароль",
+        "elapsed_time": time.strftime("%H:%M:%S", time.gmtime(elapsed))
+    })
