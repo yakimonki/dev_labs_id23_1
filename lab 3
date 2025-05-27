@@ -1,0 +1,88 @@
+from celery import Celery
+from fastapi import APIRouter, WebSocket, WebSocketDisconnect, FastAPI
+from app.celery import bruteforce_task
+import json
+import asyncio
+import websockets
+
+celery_app = Celery(
+    "bruteforce",
+    broker="redislite://localhost:6379/0",
+    backend="redislite://localhost:6379/1"
+)
+
+router1 = APIRouter()
+
+@router1.post("/tasks/start")
+async def start_task(user_id: str, hash_type: str, charset_length: int, max_length: int):
+    task_id = str(uuid.uuid4())
+    bruteforce_task.apply_async(args=[user_id, task_id, hash_type, charset_length, max_length], task_id=task_id)
+    return {"task_id": task_id}
+
+router2 = APIRouter()
+connections = {}
+
+@router2.websocket("/ws/{user_id}")
+async def websocket_endpoint(websocket: WebSocket, user_id: str):
+    await websocket.accept()
+    if user_id not in connections:
+        connections[user_id] = set()
+    connections[user_id].add(websocket)
+
+    try:
+        while True:
+            await websocket.receive_text()  # Ожидание сообщений от клиента
+    except WebSocketDisconnect:
+        connections[user_id].remove(websocket)
+
+def send_notification(user_id, message):
+    if user_id in connections:
+        for connection in connections[user_id]:
+            await connection.send_text(json.dumps(message))
+
+@celery_app.task(bind=True)
+def bruteforce_task(self, user_id, task_id, hash_type, charset_length, max_length):
+    # Уведомление о начале
+    send_notification(user_id, {
+        "status": "STARTED",
+        "task_id": task_id,
+        "hash_type": hash_type,
+        "charset_length": charset_length,
+        "max_length": max_length
+    })
+
+    # Логика брутфорса...
+    for progress in range(0, 101, 10):  # Пример прогресса
+        self.update_state(state='PROGRESS', meta={'progress': progress})
+        send_notification(user_id, {
+            "status": "PROGRESS",
+            "task_id": task_id,
+            "progress": progress,
+            "current_combination": "abc",  
+            "combinations_per_second": 15000  
+        })
+    
+    # Уведомление о завершении
+    send_notification(user_id, {
+        "status": "COMPLETED",
+        "task_id": task_id,
+        "result": "найденный_пароль",
+        "elapsed_time": "00:05:23"
+    })
+
+app = FastAPI()
+
+app.include_router(router1, prefix="/api")
+app.include_router(router2, prefix="/ws")
+
+async def connect_to_websocket(user_id):
+    uri = f"ws://localhost:8000/ws/{user_id}"
+    async with websockets.connect(uri) as websocket:
+        while True:
+            message = await websocket.recv()
+            notification = json.loads(message)
+            print(notification)
+
+if __name__ == "__main__":
+    user_id = input("Введите ваш user_id: ")
+    asyncio.run(connect_to_websocket(user_id))
