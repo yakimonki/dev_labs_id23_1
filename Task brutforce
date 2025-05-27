@@ -1,8 +1,14 @@
-from celery_app import celery_app
 import time
 import json
 from fastapi import WebSocket
 import asyncio
+from celery import Celery
+
+celery_app = Celery(
+    "bruteforce",
+    broker="redis://localhost:6379/0",
+    backend="redis://localhost:6379/1"
+)
 
 # Функция для отправки сообщений в Redis Pub/Sub (или другой брокер)
 import redis
@@ -12,7 +18,7 @@ def send_ws_message(user_id: str, message: dict):
     channel = f"user_{user_id}_channel"
     redis_client.publish(channel, json.dumps(message))
 
-@celery_app.task(bind=True)
+celery_app.task(bind=True)
 def bruteforce_task(self, user_id, task_id, hash_type, charset_length, max_length):
     # Отправляем стартовое уведомление
     send_ws_message(user_id, {
