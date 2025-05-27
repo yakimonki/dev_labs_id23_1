@@ -1,0 +1,28 @@
+import asyncio
+import websockets
+import requests
+import json
+
+user_id = "user123"
+ws_url = f"ws://localhost:8000/ws/{user_id}"
+rest_url = "http://localhost:8000"
+
+async def listen():
+    async with websockets.connect(ws_url) as websocket:
+        while True:
+            message = await websocket.recv()
+            print("Notification:", message)
+
+def start_task():
+    data = {
+        "user_id": user_id,
+        "hash_type": "rar",
+        "charset_length": 62,
+        "max_length": 8
+    }
+    r = requests.post(f"{rest_url}/tasks/start", params=data)
+    print(r.json())
+
+if __name__ == "__main__":
+    start_task()
+    asyncio.run(listen())
