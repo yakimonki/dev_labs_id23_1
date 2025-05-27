@@ -1,56 +1,55 @@
-import time
-import json
-from fastapi import WebSocket
-import asyncio
-from celery import Celery
-
-celery_app = Celery(
-    "bruteforce",
-    broker="redis://localhost:6379/0",
-    backend="redis://localhost:6379/1"
-)
-
-# Функция для отправки сообщений в Redis Pub/Sub (или другой брокер)
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Depends
+from fastapi.responses import HTMLResponse
+from tasks import bruteforce_task
+from celery.result import AsyncResult
 import redis
+import asyncio
+import json
+import uuid
+
+app = FastAPI()
 redis_client = redis.Redis()
 
-def send_ws_message(user_id: str, message: dict):
+# Хранилище подключений: user_id -> set of WebSocket
+connections = {}
+
+async def redis_pubsub_listener(user_id: str, websocket: WebSocket):
+    pubsub = redis_client.pubsub()
     channel = f"user_{user_id}_channel"
-    redis_client.publish(channel, json.dumps(message))
+    pubsub.subscribe(channel)
+    try:
+        while True:
+            message = pubsub.get_message(ignore_subscribe_messages=True, timeout=1)
+            if message:
+                await websocket.send_text(message['data'].decode())
+            await asyncio.sleep(0.1)
+    except Exception:
+        pass
+    finally:
+        pubsub.unsubscribe(channel)
 
-@celery_app.task(bind=True)
-def bruteforce_task(self, user_id, task_id, hash_type, charset_length, max_length):
-    # Отправляем стартовое уведомление
-    send_ws_message(user_id, {
-        "status": "STARTED",
-        "task_id": task_id,
-        "hash_type": hash_type,
-        "charset_length": charset_length,
-        "max_length": max_length
-    })
+@app.websocket("/ws/{user_id}")
+async def websocket_endpoint(websocket: WebSocket, user_id: str):
+    await websocket.accept()
+    if user_id not in connections:
+        connections[user_id] = set()
+    connections[user_id].add(websocket)
 
-    total = 100000  # примерное количество комбинаций
-    start_time = time.time()
+    listener_task = asyncio.create_task(redis_pubsub_listener(user_id, websocket))
 
-    for i in range(total):
-        # Эмуляция перебора
-        time.sleep(0.001)
+    try:
+        while True:
+            data = await websocket.receive_text()
+            # Обработка сообщений от клиента (управление задачами)
+            # Пример: pause, resume, cancel с task_id
+    except WebSocketDisconnect:
+        connections[user_id].remove(websocket)
+        listener_task.cancel()
 
-        if i % 10000 == 0:
-            progress = int(i / total * 100)
-            send_ws_message(user_id, {
-                "status": "PROGRESS",
-                "task_id": task_id,
-                "progress": progress,
-                "current_combination": "abc",  # пример
-                "combinations_per_second": 15000
-            })
+@app.post("/tasks/start")
+async def start_task(user_id: str, hash_type: str, charset_length: int, max_length: int):
+    task_id = str(uuid.uuid4())
+    task = bruteforce_task.apply_async(args=[user_id, task_id, hash_type, charset_length, max_length], task_id=task_id)
+    return {"task_id": task_id}
 
-    elapsed = time.time() - start_time
-
-    send_ws_message(user_id, {
-        "status": "COMPLETED",
-        "task_id": task_id,
-        "result": "найденный_пароль",
-        "elapsed_time": time.strftime("%H:%M:%S", time.gmtime(elapsed))
-    })
+# Добавьте эндпоинты pause, resume, cancel по аналогии
