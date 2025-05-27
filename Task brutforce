@@ -23,7 +23,7 @@ def bruteforce_task(self, user_id, task_id, hash_type, charset_length, max_lengt
         "max_length": max_length
     })
 
-    total = 1000000  # примерное количество комбинаций
+    total = 100000  # примерное количество комбинаций
     start_time = time.time()
 
     for i in range(total):
@@ -39,8 +39,6 @@ def bruteforce_task(self, user_id, task_id, hash_type, charset_length, max_lengt
                 "current_combination": "abc",  # пример
                 "combinations_per_second": 15000
             })
-
-        # Проверка отмены или паузы можно реализовать через shared state
 
     elapsed = time.time() - start_time
 
